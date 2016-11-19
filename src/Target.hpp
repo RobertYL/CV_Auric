@@ -6,14 +6,22 @@ using namespace cv;
 class Target
 {
 public:
-    Target(std::vector<Point> contour);
+    Target(std::vector<Point> contour, int *TargetData);
     double getHeight();
     double getWidth();
+	int getObjWidth();
+	int getObjCorners();
+	int getObjMinSize();
     void printPoints();
     Point getCenter();
     //bool isInitialized();
     //int crow;
 private:
+	struct TargetData{
+		int objWidth;
+		int corners;
+		int minSize;
+	} cross, square;
     Point getTopPoint();
     Point getBottomPoint();
     Point getLeftPoint();
