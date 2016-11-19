@@ -9,8 +9,7 @@ AppConfig::AppConfig() :
     isDevice(0),
     isHeadless(0),
     isNetworking(1),
-    isDebug(0),
-    target(0)
+    isDebug(0)
 {
 }
 
@@ -50,10 +49,6 @@ int AppConfig::getIsDebug()
     return isDebug;
 }
 
-int AppConfig::getTarget()
-{
-    return target;
-}
 // Setters
 void AppConfig::setFileName(std::string inputFileName)
 {
@@ -88,7 +83,4 @@ void AppConfig::setIsNetworking(int inputIsNetworking)
 void AppConfig::setIsDebug(int debug)
 {
     isDebug = debug;
-}
-void AppConfig::setTarget(int tar) {
-    target = tar;
 }

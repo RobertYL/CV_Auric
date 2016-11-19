@@ -20,7 +20,6 @@ class AppConfig
         int getIsHeadless();
         int getIsNetworking();
         int getIsDebug();
-        int getTarget(); //1 -> cross target; 2 -> square target
         std::string getFileName();
     private:
         std::string fileName;
@@ -30,7 +29,6 @@ class AppConfig
         int isHeadless;
         int isNetworking;
         int isDebug;
-        int target;
 };
 
 #endif /* AppConfig_hpp */

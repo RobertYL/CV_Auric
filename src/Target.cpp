@@ -3,98 +3,105 @@
 #include <math.h>
 #include <iostream>
 
-using namespace cv;
-using namespace std;
-
-
-void thresh_callback(int, void* )
+Target::Target(std::vector<cv::Point> contour)
 {
-  Mat canny_output;
-  vector<vector<Point> > contours;
-  vector<Vec4i> hierarchy;
+    edge = contour;
+    //crap
+    std::cout << "EDGE" << edge.size();
 
-  /// Detect edges using canny
-  Canny( src_gray, canny_output, thresh, thresh*2, 3 );
-  /// Find contours
-  findContours( canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-
-  /// Draw contours
-  Mat drawing = Mat::zeros( canny_output.size(), CV_8UC3 );
-  for( int i = 0; i< contours.size(); i++ )
-     {
-       Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-       drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, Point() );
-     }
-
-  /// Show in a window
-  namedWindow( "Contours", CV_WINDOW_AUTOSIZE );
-  imshow( "Contours", drawing );
+    //crow = 1415;
 }
 
-double getMinX()
+double Target::getHeight()
 {
-	Point min(10000,10000);
-	for (unsigned int a=0; a<contours.size(); a++)
-	{	
-		if(contours[a].x < min.x)
-		{
-			min = edge[a];
-		}
-	}
-	return max;
+    return fabs(getTopPoint().y - getBottomPoint().y);
 }
 
-double getMaxX()
+double Target::getWidth()
 {
-   Point max(0,0);
-   for(unsigned int a = 0; a < contours.size(); a++)
-   {
-       if(contours[a].x > max.x)
-       {
-           max = edge[a];
-       }
-   }
-   return max;
+    return fabs(getRightPoint().x - getLeftPoint().x);
 }
 
-double getMinY()
+/*
+bool Target::isInitialized()
 {
-  Point min(10000,10000);
-  for(unsigned int i = 0; i < contours.size(); i++)
-  {
-      if(contours[i] < min)
-      {
-          min = contours[i];
-      }
-  }
-  return min;
+    std::cout << "EDGE" << edge;
+    if (edge.size() == 0) {
+        return false;
+    }
+    return true;
+}
+*/
+
+void Target::printPoints() //debugging
+{
+    std::cout << "TopPoint: " << getTopPoint() << std::endl;
+    std::cout << "BottomPoint: " << getBottomPoint() << std::endl;
+    std::cout << "LeftPoint: " << getLeftPoint() << std::endl;
+    std::cout << "RightPoint: " << getRightPoint() << std::endl;
 }
 
-double getMaxY()
-  Point max(0,0);
-  for(unsigned int i = 0; i < edge.size(); i++)
-  {
-      if(edge[i] > max)
-      {
-          max = edge[i];
-      }
-  }
-  return max
+cv::Point Target::getCenter()//finds center point of target
+{
+    cv::Point center(0, 0);
+
+    int x = 0;
+    for(; x < edge.size(); x++)
+    {
+        center += edge.at(x);
+    }
+    //center /= x;
+    center.x /= x;
+    center.y /= x;
+    //will discuss better changes next time we meet
+    return center;
 }
 
-double getHeight()
+cv::Point Target::getTopPoint()
 {
-    double max = getMaxY();
-    double min = getMinY();
-    double height = max - min;
-    return height;
+    cv::Point max(0,0);
+    for(unsigned int i = 0; i < edge.size(); i++)
+    {
+        if(edge[i].y > max.y)
+        {
+            max = edge[i];
+        }
+    }
+    return max;
 }
-
-double getWidth()
+cv::Point Target::getBottomPoint()
 {
-    
-      double max = getMaxX();
-      double min = getMaxY();
-      double width = max - min;
-      return width;
+    cv::Point min(10000,10000);
+    for(unsigned int i = 0; i < edge.size(); i++)
+    {
+        if(edge[i].y < min.y)
+        {
+            min = edge[i];
+        }
+    }
+    return min;
+}
+cv::Point Target::getLeftPoint()
+{
+    cv::Point min(0,0);
+    for(unsigned int i = 0; i < edge.size(); i++)
+    {
+        if(edge[i].x > min.x)
+        {
+            min = edge[i];
+        }
+    }
+    return min;
+}
+cv:: Point Target::getRightPoint()
+{
+    cv::Point max(10000,10000);
+    for(unsigned int i = 0; i < edge.size(); i++)
+    {
+        if(edge[i].x < max.x)
+        {
+            max = edge[i];
+        }
+    }
+    return max;
 }
