@@ -6,6 +6,6 @@
 * Computes and relays data of target 20 times per second
 
 ###Contributers
+* (Team Lead) Ronak Shah
 * Dylan Santora
 * Robert Lee
-* Ronak Shah (Almost)
