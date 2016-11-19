@@ -83,7 +83,7 @@ double TargetDetector::angle(cv::Point p1, cv::Point p2, cv::Point p0) {
     return atan(dy1/dx1)-atan(dy2/dx2); //in rad
 }
 
-std::vector<Point> TargetDetector::filterContours(std::vector<std::vector<Point> > contours) {
+std::vector<Point> TargetDetectorSquare::filterContours(std::vector<std::vector<Point> > contours) {
 
     Mat thirdTime(Size(500,500), CV_8UC1, Scalar( rand()&255, rand()&255, rand()&255 ));
 
@@ -121,6 +121,44 @@ std::vector<Point> TargetDetector::filterContours(std::vector<std::vector<Point>
         //
     }
 
+
+std::vector<Point> TargetDetectorCross::filterContours(std::vector<std::vector<Point> > contours) {
+
+    Mat thirdTime(Size(500,500), CV_8UC1, Scalar( rand()&255, rand()&255, rand()&255 ));
+
+    for(unsigned int j = 0; j < contours.size(); j++)
+    {
+        std::vector<Point> outputContour;
+        std::vector<std::vector<Point> > pointless;
+        approxPolyDP(contours[j], outputContour, (cv::arcLength(cv::Mat(contours.at(j)), true) * 0.01), true);
+
+
+        if (contourArea(outputContour) > 100 && outputContour.size() == 8) { //&& isContourConvex(outputContour)) {
+            double maxCosine = 0;
+            for(int j = 2; j <=12; j++)
+            {
+                double cosine;
+                try {
+                    cosine = fabs(cos(angle(outputContour.at(j%4), outputContour.at(j-2), outputContour.at(j-1))));
+                }
+                catch(std::exception e){
+                    std:: cout << e.what();
+                }
+                maxCosine = MAX(maxCosine, cosine);
+            }
+            //filters out contours that don't have only 90deg anlges
+            if(maxCosine < .2)
+
+            {
+                pointless.push_back(outputContour);
+                Scalar color(0,0,0);
+                drawContours(secretImage, pointless, 0, color, 10);
+                return outputContour;
+            }
+
+        }
+        //
+    }
 
     return std::vector<Point>();
 }
