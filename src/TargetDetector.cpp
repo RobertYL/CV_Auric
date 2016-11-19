@@ -9,7 +9,7 @@ TargetDetector::TargetDetector() {
 
 Target* TargetDetector::processImage(Mat input) {
     secretImage = input.clone();
-    input = thresholdImage(input, 0, 102, 227, 255);
+    input = thresholdImage(input, 0, 46, 227, 255);
     dilate(input, input, Mat());
 
     std::vector<std::vector<Point> > contours = contour(input);
