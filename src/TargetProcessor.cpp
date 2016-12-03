@@ -3,9 +3,9 @@
 #include <math.h>
 
 TargetProcessor::TargetProcessor(Target* target){
-    focalLength = 480; //varies by camera
-    horizCenter = 320; //aslo varies by camera (center horizontal point on video)
-    vertCenter = 240; //center vertical point on video
+    focalLength = 415.74; //varies by camera
+    horizCenter = 210.2315; //aslo varies by camera (center horizontal point on video)
+    vertCenter = 207.87; //center vertical point on video
 
 } //constructor
 
