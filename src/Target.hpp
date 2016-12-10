@@ -6,7 +6,7 @@ using namespace cv;
 class Target
 {
 public:
-    Target(std::vector<Point> contour, int *TargetData);
+    Target(std::vector<Point> contour);
     double getHeight();
     double getWidth();
 	int getObjWidth(int object);
