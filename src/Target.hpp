@@ -9,9 +9,9 @@ public:
     Target(std::vector<Point> contour, int *TargetData);
     double getHeight();
     double getWidth();
-	int getObjWidth();
-	int getObjCorners();
-	int getObjMinSize();
+	int getObjWidth(int object);
+	int getObjCorners(int object);
+	int getObjMinSize(int object);
     void printPoints();
     Point getCenter();
     //bool isInitialized();

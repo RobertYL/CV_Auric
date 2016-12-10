@@ -39,7 +39,7 @@ int Target::getObjCorners(int object){
 		return square.corners;
 }
 
-int Target::getObjMinSize(){
+int Target::getObjMinSize(int object){
 	if(object)
 		return cross.minSize;
 	else
@@ -56,14 +56,16 @@ bool Target::isInitialized(){
 }
 */
 
-void Target::printPoints() //debugging{
+void Target::printPoints() //debugging
+{
     std::cout << "TopPoint: " << getTopPoint() << std::endl;
     std::cout << "BottomPoint: " << getBottomPoint() << std::endl;
     std::cout << "LeftPoint: " << getLeftPoint() << std::endl;
     std::cout << "RightPoint: " << getRightPoint() << std::endl;
 }
 
-cv::Point Target::getCenter()//finds center point of target{
+cv::Point Target::getCenter()//finds center point of target
+{
     cv::Point center(0, 0);
 
     int x = 0;
