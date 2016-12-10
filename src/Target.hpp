@@ -18,7 +18,7 @@ public:
     //int crow;
 private:
 	struct TargetData{
-		int objWidth;
+		double objWidth;
 		int corners;
 		int minSize;
 	} cross, square;

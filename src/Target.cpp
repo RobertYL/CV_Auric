@@ -9,10 +9,10 @@ Target::Target(std::vector<cv::Point> contour){
     std::cout << "EDGE" << edge.size();
 
     //crow = 1415;
-	cross.objWidth = /*Number here*//*In meters*/;
+	cross.objWidth = 0.5;
 	cross.corners = 12;
 	cross.minSize = 100;
-	square.objWidth = /*Number here*//*In meters*/;
+	square.objWidth = 0.5;
 	square.corners = 4;
 	square.minSize = 100;
 }
