@@ -3,18 +3,18 @@
 #include <math.h>
 #include <iostream>
 
-Target::Target(std::vector<cv::Point> contour, int *TargetData){
+Target::Target(std::vector<cv::Point> contour){
     edge = contour;
     //crap
     std::cout << "EDGE" << edge.size();
 
     //crow = 1415;
-	cross.objWidth = TargetData[0];
-	cross.corners = TargetData[1];
-	cross.minSize = TargetData[2];
-	square.objWidth = TargetData[3];
-	square.corners = TargetData[4];
-	square.minSize = TargetData[5];
+	cross.objWidth = /*Number here*/;
+	cross.corners = /*Number here*/;
+	cross.minSize = /*Number here*/;
+	square.objWidth = /*Number here*/;
+	square.corners = /*Number here*/;
+	square.minSize = /*Number here*/;
 }
 
 double Target::getHeight(){
@@ -67,7 +67,7 @@ void Target::printPoints() //debugging
 cv::Point Target::getCenter()//finds center point of target
 {
     cv::Point center(0, 0);
-    
+
     for(unsigned int x = 0; x < edge.size(); x++){
         center += edge.at(x);
     }

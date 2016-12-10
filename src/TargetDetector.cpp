@@ -17,10 +17,9 @@ Target* TargetDetector::processImage(Mat input) {
     std::vector<Point> finalContour = filterContours(contours);
     std::cout << "not filterContours" << std::endl;
 
-    if (finalContour.size() == 0) {
+    if (finalContour.size() == 0){
         return NULL;
-    }
-    else {
+    }else{
         Target* toReturn = new Target(finalContour);
         return toReturn;
     }
