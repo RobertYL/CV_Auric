@@ -68,7 +68,7 @@ cv::Point Target::getCenter()//finds center point of target
 {
     cv::Point center(0, 0);
 
-    for(int x = 0; x < edge.size(); x++){
+    for(unsigned int x = 0; x < edge.size(); x++){
         center += edge.at(x);
     }
 
@@ -91,7 +91,7 @@ cv::Point Target::getTopPoint(){
 
 cv::Point Target::getBottomPoint(){
     cv::Point min(10000,10000);
-    for(int i = 0; i < edge.size(); i++)
+    for(unsigned int i = 0; i < edge.size(); i++)
         if(edge[i].y < min.y)
             min = edge[i];
     return min;
