@@ -67,16 +67,13 @@ void Target::printPoints() //debugging
 cv::Point Target::getCenter()//finds center point of target
 {
     cv::Point center(0, 0);
-
+    
     for(unsigned int x = 0; x < edge.size(); x++){
         center += edge.at(x);
     }
 
-    if(x = 0)
-        x = 1;
-
-    center.x /= x;
-    center.y /= x;
+    center.x /= edge.size();
+    center.y /= edge.size();
 
     return center;
 }
