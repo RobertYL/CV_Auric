@@ -3,6 +3,7 @@
 *   Main File
 *   TODO: Add Helpful Comments
 **/
+
 #include <opencv2/opencv.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -22,7 +23,7 @@ int main(int argc, char* argv[])
     // Create all the necessary objects (calls the default constructor for each)
     TargetDetector detector;
     TargetProcessor processor;
-    NetworkController networkController;
+    //NetworkController networkController;
     VideoDevice camera;
 	CmdLineInterface interface(argc, argv);
 	AppConfig config = interface.getConfig();
@@ -35,8 +36,8 @@ int main(int argc, char* argv[])
     }
 
     //init networking
-    if(config.getIsNetworking())
-        networkController.startServer();
+    //if(config.getIsNetworking())
+        //networkController.startServer();
 
     //if(!config.getIsHeadless())
     //    gui.init();
@@ -57,8 +58,8 @@ int main(int argc, char* argv[])
         if(config.getIsDebug())
             std::cout << "While Loop #" << loop << std::endl;
 
-		if(config.getIsNetworking())
-        	networkController.waitForPing();
+		//if(config.getIsNetworking())
+        	//networkController.waitForPing();
 
         image = camera.getImage();
         if(!image.data) // check if image is valid
@@ -116,13 +117,13 @@ int main(int argc, char* argv[])
             if(config.getIsDebug())
                 std::cout << "Image Processed by TargetProcessor" << std::endl;
 
-                std::string dis = "distance: " + std::to_string(distance);
-                std::string alt = "altitude: " + std::to_string(altitude);
-                std::string azi = "azimuth: " + std::to_string(azimuth);  
+			std::string dis = "distance: " + std::to_string(distance);
+			std::string alt = "altitude: " + std::to_string(altitude);
+			std::string azi = "azimuth: " + std::to_string(azimuth);  
 
-                cv::putText(background, dis, cv::Point(50,100),
-                cv::FONT_HERSHEY_COMPLEX_SMALL, 2, cv::Scalar(0, 255, 0),
-                1);
+			cv::putText(background, dis, cv::Point(50,100),
+			cv::FONT_HERSHEY_COMPLEX_SMALL, 2, cv::Scalar(0, 255, 0),
+			1);
 
                 cv::putText(background, alt, cv::Point(50,200),
                 cv::FONT_HERSHEY_COMPLEX_SMALL, 2, cv::Scalar(0, 255, 0),
@@ -134,25 +135,25 @@ int main(int argc, char* argv[])
 
                 imshow("General", background);
 
-                if (config.getIsNetworking())
-			    {
-		            networkController.sendMessage("true;" +
-		            boost::lexical_cast<std::string> (distance) + ";" +
-					boost::lexical_cast<std::string> (azimuth) + ";" +
-					boost::lexical_cast<std::string> (altitude));
-			}
+                /*if (config.getIsNetworking()){
+		    networkController.sendMessage("true;" +
+		    boost::lexical_cast<std::string> (distance) + ";" +
+			boost::lexical_cast<std::string> (azimuth) + ";" +
+			boost::lexical_cast<std::string> (altitude));
+			
+		}*/
 
-			if(config.getIsDebug()){
-            	std::cout << "Target Found! Distance: " << distance;
-                std::cout << "Altitude: " << altitude << std::endl;
-                std::cout << "Azimuth: " << azimuth << std::endl;
-            }
+		if(config.getIsDebug()){
+			std::cout << "Target Found! Distance: " << distance;
+			std::cout << "Altitude: " << altitude << std::endl;
+			std::cout << "Azimuth: " << azimuth << std::endl;
+		    }
 
         }
         else
         {
-            if (config.getIsNetworking())
-                networkController.sendMessage("false;");
+            //if (config.getIsNetworking())
+                //networkController.sendMessage("false;");
         }
         imshow("Live Video Feed", image);
 
