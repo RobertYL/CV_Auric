@@ -127,7 +127,7 @@ std::vector<Point> TargetDetector::filterContoursSquare(std::vector<std::vector<
     }
 
 
-std::vector<Point> TargetDetector::filterContoursCross(std::vector<std::vector<Point> > contours) {
+std::vector<Point> TargetDetector::filterContoursCross(std::vector<std::vector<Point> > contours){
 
     Mat thirdTime(Size(500,500), CV_8UC1, Scalar( rand()&255, rand()&255, rand()&255 ));
 
@@ -158,5 +158,5 @@ std::vector<Point> TargetDetector::filterContoursCross(std::vector<std::vector<P
             }
         }
     }
-        return std::vector<Point>();
+    return std::vector<Point>();
 }
