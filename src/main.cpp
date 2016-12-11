@@ -24,15 +24,17 @@ int main(int argc, char* argv[])
     TargetDetector detector;
     TargetProcessor processor;
     //NetworkController networkController;
-    VideoDevice camera;
+    VideoDevice cameraSq;
+    VideoDevice cameraCr;
 	CmdLineInterface interface(argc, argv);
 	AppConfig config = interface.getConfig();
 	//GUIManager gui;
 
 	if(config.getIsDevice()){
-        camera.startCapture(config.getDeviceID());
+        cameraSq.startCapture(0);
+        cameraCr.startCapture(1);
         if(config.getIsDebug())
-            std::cout << "Camera ready!\n";
+            std::cout << "Cameras ready!\n";
     }
 
     //init networking
@@ -44,6 +46,7 @@ int main(int argc, char* argv[])
     if(config.getIsDebug())
 	 	std::cout << "Im debugging! :D\n";
     cv::Mat image;
+    int currentShape = 0;
 
     //debug
     int loop = 1;
@@ -61,9 +64,13 @@ int main(int argc, char* argv[])
 		//if(config.getIsNetworking())
         	//networkController.waitForPing();
 
-        image = camera.getImage();
-        if(!image.data) // check if image is valid
-        {
+        if(currentShape){
+            image = cameraCr.getImage();
+        }else{
+            image = cameraSq.getImage();
+        }
+
+        if(!image.data){ // check if image is valid
             if(config.getIsDebug())
                 std::cout << "failed to read image" << std::endl;
             return -1;
@@ -71,7 +78,7 @@ int main(int argc, char* argv[])
 
         if(config.getIsDebug())
             std::cout << "Image Read" << std::endl;
-        Target* target = detector.processImage(image);
+        Target* target = detector.processImage(image, currentShape);
 
         if(config.getIsDebug())
             std::cout << "Image Processed by Target Detector" << std::endl;
@@ -87,10 +94,7 @@ int main(int argc, char* argv[])
             image = detector.getOutlinedImage();
         }
         std::cout <<"About to check the value of foundTarget" << std::endl;
-        if(foundTarget)
-        {
-
-
+        if(foundTarget){
             std::cout <<"Target was found " << std::endl;
 
             if(config.getIsDebug())
@@ -119,7 +123,7 @@ int main(int argc, char* argv[])
 
 			std::string dis = "distance: " + std::to_string(distance);
 			std::string alt = "altitude: " + std::to_string(altitude);
-			std::string azi = "azimuth: " + std::to_string(azimuth);  
+			std::string azi = "azimuth: " + std::to_string(azimuth);
 
 			cv::putText(background, dis, cv::Point(50,100),
 			cv::FONT_HERSHEY_COMPLEX_SMALL, 2, cv::Scalar(0, 255, 0),
@@ -140,7 +144,7 @@ int main(int argc, char* argv[])
 		    boost::lexical_cast<std::string> (distance) + ";" +
 			boost::lexical_cast<std::string> (azimuth) + ";" +
 			boost::lexical_cast<std::string> (altitude));
-			
+
 		}*/
 
 		if(config.getIsDebug()){
@@ -157,7 +161,11 @@ int main(int argc, char* argv[])
         }
         imshow("Live Video Feed", image);
 
-
+        if(currentShape){
+            currentShape = 0;
+        }else{
+            currentShape = 1;
+        }
         loop++;
         delete target;
     }

@@ -7,14 +7,19 @@ TargetDetector::TargetDetector() {
     //do derpy things
 }
 
-Target* TargetDetector::processImage(Mat input) {
+Target* TargetDetector::processImage(Mat input, int shape) {
     secretImage = input.clone();
     input = thresholdImage(input, 0, 46, 227, 255);
     dilate(input, input, Mat());
 
     std::vector<std::vector<Point> > contours = contour(input);
     std::cout << "not contours" << std::endl;
-    std::vector<Point> finalContour = filterContours(contours);
+    if(shape){
+        std::vector<Point> finalContour = filterContoursCross(contours);
+    }else{
+        std::vector<Point> finalContour = filterContoursSquare(contours);
+    }
+
     std::cout << "not filterContours" << std::endl;
 
     if (finalContour.size() == 0){
@@ -82,7 +87,7 @@ double TargetDetector::angle(cv::Point p1, cv::Point p2, cv::Point p0) {
     return atan(dy1/dx1)-atan(dy2/dx2); //in rad
 }
 
-std::vector<Point> TargetDetectorSquare::filterContours(std::vector<std::vector<Point> > contours) {
+std::vector<Point> TargetDetector::filterContoursSquare(std::vector<std::vector<Point> > contours) {
 
     Mat thirdTime(Size(500,500), CV_8UC1, Scalar( rand()&255, rand()&255, rand()&255 ));
 
@@ -121,7 +126,7 @@ std::vector<Point> TargetDetectorSquare::filterContours(std::vector<std::vector<
     }
 
 
-std::vector<Point> TargetDetectorCross::filterContours(std::vector<std::vector<Point> > contours) {
+std::vector<Point> TargetDetector::filterContoursCross(std::vector<std::vector<Point> > contours) {
 
     Mat thirdTime(Size(500,500), CV_8UC1, Scalar( rand()&255, rand()&255, rand()&255 ));
 
