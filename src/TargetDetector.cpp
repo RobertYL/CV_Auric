@@ -14,10 +14,11 @@ Target* TargetDetector::processImage(Mat input, int shape) {
 
     std::vector<std::vector<Point> > contours = contour(input);
     std::cout << "not contours" << std::endl;
+    std::vector<Point> finalContour;
     if(shape){
-        std::vector<Point> finalContour = filterContoursCross(contours);
+        finalContour = filterContoursCross(contours);
     }else{
-        std::vector<Point> finalContour = filterContoursSquare(contours);
+        finalContour = filterContoursSquare(contours);
     }
 
     std::cout << "not filterContours" << std::endl;
@@ -130,39 +131,32 @@ std::vector<Point> TargetDetector::filterContoursCross(std::vector<std::vector<P
 
     Mat thirdTime(Size(500,500), CV_8UC1, Scalar( rand()&255, rand()&255, rand()&255 ));
 
-    for(unsigned int j = 0; j < contours.size(); j++)
-    {
+    for(unsigned int j = 0; j < contours.size(); j++){
         std::vector<Point> outputContour;
         std::vector<std::vector<Point> > pointless;
         approxPolyDP(contours[j], outputContour, (cv::arcLength(cv::Mat(contours.at(j)), true) * 0.01), true);
 
 
-        if (contourArea(outputContour) > 100 && outputContour.size() == 8) { //&& isContourConvex(outputContour)) {
+        if(contourArea(outputContour) > 100 && outputContour.size() == 8) { //&& isContourConvex(outputContour))
             double maxCosine = 0;
-            for(int j = 2; j <=12; j++)
-            {
-                double cosine;
-                try {
-                    cosine = fabs(cos(angle(outputContour.at(j%4), outputContour.at(j-2), outputContour.at(j-1))));
+                for(int j = 2; j <=12; j++){
+                    double cosine;
+                    try {
+                        cosine = fabs(cos(angle(outputContour.at(j%4), outputContour.at(j-2), outputContour.at(j-1))));
+                    }
+                    catch(std::exception e){
+                        std:: cout << e.what();
+                    }
+                    maxCosine = MAX(maxCosine, cosine);
                 }
-                catch(std::exception e){
-                    std:: cout << e.what();
-                }
-                maxCosine = MAX(maxCosine, cosine);
+                //filters out contours that don't have only 90deg anlges
+                if(maxCosine < .2){
+                    pointless.push_back(outputContour);
+                    Scalar color(0,0,0);
+                    drawContours(secretImage, pointless, 0, color, 10);
+                    return outputContour;
             }
-            //filters out contours that don't have only 90deg anlges
-            if(maxCosine < .2)
-
-            {
-                pointless.push_back(outputContour);
-                Scalar color(0,0,0);
-                drawContours(secretImage, pointless, 0, color, 10);
-                return outputContour;
-            }
-
         }
-        //
     }
-
-    return std::vector<Point>();
+        return std::vector<Point>();
 }
