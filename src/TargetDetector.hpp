@@ -21,7 +21,8 @@ private:
 
     double angle(cv::Point p1, cv::Point p2, cv::Point p0);
     std::vector<std::vector<Point> >  contour(Mat input);
-    std::vector<Point> filterContours(std::vector<std::vector<Point> > contours);
+    std::vector<Point> filterContoursCross(std::vector<std::vector<Point> > contours);
+    std::vector<Point> filterContoursSquare(std::vector<std::vector<Point> > contours);
 };
 
 #endif
